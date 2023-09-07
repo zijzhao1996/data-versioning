@@ -15,6 +15,7 @@ docker build -t data-version-cli --platform=linux/arm64/v8 -f Dockerfile .
 docker run --rm --name data-version-cli -ti \
 -v "$BASE_DIR":/app \
 -v "$SECRETS_DIR":/secrets \
+-v ~/.gitconfig:/etc/gitconfig \
 -e GOOGLE_APPLICATION_CREDENTIALS=/secrets/data-service-account.json \
 -e GCP_PROJECT="ac215-project" \
 -e GCP_ZONE="us-central1-a" \
