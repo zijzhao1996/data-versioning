@@ -1,4 +1,0 @@
-[core]
-    remote = dataset
-['remote "dataset"']
-    url = gs://mushroom-app-data/dvcstore
