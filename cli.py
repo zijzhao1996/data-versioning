@@ -1,6 +1,8 @@
+"""
+Module that contains the command line app.
+"""
+import argparse
 import os
-import asyncio
-import pandas as pd
 import traceback
 import time
 from google.cloud import storage
@@ -9,32 +11,32 @@ import glob
 import json
 
 
-GCS_BUCKET_NAME = "mushroom-app-data"  # Your bucket name
+GCS_BUCKET_NAME = os.environ["GCS_BUCKET_NAME"]
 
 
-async def download_data():
+def download_data():
     print("download_data")
 
     bucket_name = GCS_BUCKET_NAME
 
     # Clear dataset folders
-    dataset_prep_folder = "dataset_prep"
+    dataset_prep_folder = "mushroom_dataset_prep"
     shutil.rmtree(dataset_prep_folder, ignore_errors=True, onerror=None)
     os.makedirs(dataset_prep_folder, exist_ok=True)
-    dataset_folder = "dataset"
+    dataset_folder = "mushroom_dataset"
     shutil.rmtree(dataset_folder, ignore_errors=True, onerror=None)
     os.makedirs(dataset_folder, exist_ok=True)
 
     # Initiate Storage client
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
-    blobs = bucket.list_blobs(prefix="mushroom_labeled/")
+    blobs = bucket.list_blobs(prefix="mushrooms_labeled/")
 
     # Download annotations
     for blob in blobs:
         print("Annotation file:", blob.name)
 
-        if not blob.name.endswith("mushroom_labeled/"):
+        if not blob.name.endswith("mushrooms_labeled/"):
             filename = os.path.basename(blob.name)
             local_file_path = os.path.join(dataset_prep_folder, filename)
             blob.download_to_filename(local_file_path)
@@ -64,21 +66,23 @@ async def download_data():
         blob.download_to_filename(local_file_path)
 
 
-async def run():
-    try:
-        print("CLI....")
-        total_start_time = time.time()
-
-        # Download labeled data from GCS
-        await download_data()
-
-        print("************** Complete ****************")
-        execution_time = (time.time() - total_start_time) / 60.0
-        print("Total execution time (mins)", execution_time)
-
-    except Exception as e:
-        print(e)
-        traceback.print_exc()
+def main(args=None):
+    if args.download:
+        download_data()
 
 
-asyncio.run(run())
+if __name__ == "__main__":
+    # Generate the inputs arguments parser
+    # if you type into the terminal 'python cli.py --help', it will provide the description
+    parser = argparse.ArgumentParser(description="Data Versioning CLI")
+
+    parser.add_argument(
+        "-d",
+        "--download",
+        action="store_true",
+        help="Download labeled data from GCS Bucket",
+    )
+
+    args = parser.parse_args()
+
+    main(args)
