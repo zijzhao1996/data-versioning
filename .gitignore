@@ -1,5 +1,5 @@
 # misc
 .DS_Store
 /docker-volumes
-/dataset_prep
-/dataset
+/mushroom_dataset_prep
+/mushroom_dataset
