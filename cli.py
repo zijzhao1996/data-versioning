@@ -83,7 +83,7 @@ if __name__ == "__main__":
         "-d",
         "--download",
         action="store_true",
-        help="Download labeled data from GCS Bucket",
+        help="Download labeled data from a GCS Bucket",
     )
 
     args = parser.parse_args()
