@@ -51,19 +51,22 @@ def download_data():
         # Annotations
         # annotations = annotation_json["annotations"]
         # Assume we pick just the first annotation from the labeled list
-        label = annotation_json["result"][0]["value"]["choices"][0]
-        # Create the label folder
-        label_folder = os.path.join(dataset_folder, label)
-        os.makedirs(label_folder, exist_ok=True)
+        if len(annotation_json["result"]) > 0:
+            label = annotation_json["result"][0]["value"]["choices"][0]
+            # Create the label folder
+            label_folder = os.path.join(dataset_folder, label)
+            os.makedirs(label_folder, exist_ok=True)
 
-        # Download the image from GCS [Another option could be to just store the image url and label in DVC]
-        image_url = annotation_json["task"]["data"]["image"]
-        image_url = image_url.replace("gs://", "").replace(GCS_BUCKET_NAME + "/", "")
-        print("image_url:", image_url)
-        blob = bucket.blob(image_url)
-        filename = os.path.basename(blob.name)
-        local_file_path = os.path.join(label_folder, filename)
-        blob.download_to_filename(local_file_path)
+            # Download the image from GCS [Another option could be to just store the image url and label in DVC]
+            image_url = annotation_json["task"]["data"]["image"]
+            image_url = image_url.replace("gs://", "").replace(
+                GCS_BUCKET_NAME + "/", ""
+            )
+            print("image_url:", image_url)
+            blob = bucket.blob(image_url)
+            filename = os.path.basename(blob.name)
+            local_file_path = os.path.join(label_folder, filename)
+            blob.download_to_filename(local_file_path)
 
 
 def main(args=None):
