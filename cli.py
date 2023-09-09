@@ -77,7 +77,7 @@ def main(args=None):
 if __name__ == "__main__":
     # Generate the inputs arguments parser
     # if you type into the terminal 'python cli.py --help', it will provide the description
-    parser = argparse.ArgumentParser(description="Data Versioning CLI")
+    parser = argparse.ArgumentParser(description="Data Versioning CLI...")
 
     parser.add_argument(
         "-d",
