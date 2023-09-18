@@ -4,8 +4,8 @@ set -e
 
 export BASE_DIR=$(pwd)
 export SECRETS_DIR=$(pwd)/../secrets/
-export GCS_BUCKET_NAME="mushroom-app-data-demo"
-export GCP_PROJECT="ac215-project"
+export GCS_BUCKET_NAME="mushroom-app-data-demo2"
+export GCP_PROJECT="mushroom-project"
 export GCP_ZONE="us-central1-a"
 
 # Create the network if we don't have it yet
